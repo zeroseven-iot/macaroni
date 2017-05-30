@@ -1,0 +1,1 @@
+C:\Zeroseven-IoT\Macaroni\Macaroni.UWP\Macaroni.UWP\Macaroni.UWP.csproj;arm
