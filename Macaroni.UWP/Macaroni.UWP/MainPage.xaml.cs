@@ -17,8 +17,6 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.Azure.Devices;
 using Microsoft.Azure.Devices.Client;
-using Microsoft.Azure.Devices.Common.Exceptions;
-using Message = Microsoft.Azure.Devices.Message;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -39,6 +37,8 @@ namespace Macaroni.UWP
             this.InitializeComponent();
 
             deviceClient = DeviceClient.Create(iotHubUri, new DeviceAuthenticationWithRegistrySymmetricKey("myFirstDevice", deviceKey), Microsoft.Azure.Devices.Client.TransportType.Mqtt);
+
+            StartCommunication();
         }
 
         public async Task StartCommunication()
