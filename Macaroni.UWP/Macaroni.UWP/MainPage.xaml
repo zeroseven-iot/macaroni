@@ -7,8 +7,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          HorizontalAlignment="Center"
+          VerticalAlignment="Center">
 
-        <TextBlock Text="Test"></TextBlock>
-    </Grid>
+        <TextBlock Text="Test" Name="txtDeviceID"></TextBlock>
+    </StackPanel>
 </Page>
