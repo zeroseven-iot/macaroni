@@ -127,6 +127,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.Azure.Devices">
+      <Version>1.2.7</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Azure.Devices.Client">
       <Version>1.2.12</Version>
     </PackageReference>

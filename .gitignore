@@ -1,3 +1,4 @@
-Macaroni.UWP/Macaroni.UWP/obj/
-Macaroni.UWP/Macaroni.UWP/bin/
+Macaroni.UWP/**/obj
+Macaroni.UWP/**/bin
 *.user
+Macaroni.UWP/packages/
