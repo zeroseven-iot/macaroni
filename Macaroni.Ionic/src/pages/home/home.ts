@@ -1,29 +1,19 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import {AlertController } from 'ionic-angular';
+import { ReconnectingWebSocket } from '../../app/helpers/reconnectingwebsocket';
 
 @Component({
-  selector: 'page-home',
-  templateUrl: 'home.html'
+	selector: 'page-home',
+	templateUrl: 'home.html'
 })
 export class HomePage {
+	public azureSocket:ReconnectingWebSocket;
+	constructor(public navCtrl: NavController) {
+		//this.azureSocket = new ReconnectingWebSocket("wss://<YOUR-IOT-HUB-NAME>.azure-devices.net:443/$iothub/websocket", ["AMQPWSB10"]);
+		this.azureSocket = new ReconnectingWebSocket("ws://echo.websocket.org")
+	}
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController) {
-    
-  }
-
-  public test(){
-    alert("test");
-  }
-
-  public showAlert(){
-    let alert = this.alertCtrl.create({
-      title: 'New Friend!',
-      subTitle: 'Your friend, Obi wan Kenobi, just accepted your friend request!',
-      buttons: ['OK']
-    });
-    alert.present();
-
-  }
-
+	public sendMessageToAzure() {
+		this.azureSocket.send("This is a test");
+	}
 }
