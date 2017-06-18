@@ -19,6 +19,7 @@ using Microsoft.Azure.Devices;
 using Microsoft.Azure.Devices.Client;
 using System.IO.IsolatedStorage;
 using Microsoft.Azure.Devices.Client.Exceptions;
+using Macaroni.Common;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -31,8 +32,8 @@ namespace Macaroni.UWP
     {
         static DeviceClient deviceClient;
         static RegistryManager registryManager;
-        static string connectionString = "HostName=FerTestHub.azure-devices.net;SharedAccessKeyName=iothubowner;SharedAccessKey=+wWaCJYd3dYBd37c6Bkm/2/be7Y/xUM7TWeYw7iS9f4=";
-        static string iotHubUri = "FerTestHub.azure-devices.net";
+        static string connectionString = Constants.HubConnectionString;
+        static string iotHubUri = Constants.HubUrI;
         string deviceId = "Macaroni_01";
 
         public MainPage()
@@ -40,23 +41,9 @@ namespace Macaroni.UWP
             this.InitializeComponent();
         }
 
-
-        private async Task<string> GetDeviceKey()
-        {
-            registryManager = RegistryManager.CreateFromConnectionString(connectionString);
-            Device device;
-            try
-            {
-                device = await registryManager.AddDeviceAsync(new Device(deviceId));
-            }
-            catch (DeviceAlreadyExistsException)
-            {
-                device = await registryManager.GetDeviceAsync(deviceId);
-            }
-
-            return device.Authentication.SymmetricKey.PrimaryKey;
-        }
-
+        /// <summary> Load finished page event </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">The event args</param>
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             txtOutput.Text += "Getting device key" + Environment.NewLine;
@@ -69,18 +56,53 @@ namespace Macaroni.UWP
             ReceiveC2dAsync();
         }
 
+        /// <summary> Gets the device key </summary>
+        /// <returns></returns>
+        private async Task<string> GetDeviceKey()
+        {
+            registryManager = RegistryManager.CreateFromConnectionString(connectionString);
+            Device device;
+            try
+            {
+                // TODO: the device ID should be generated automatically (maybe a GUID) and stored in the local storage of the device
+                // then check if there is something already stored and use that before generate another GUID
+                device = await registryManager.AddDeviceAsync(new Device(deviceId));
+            }
+            catch (Exception)
+            {
+                device = await registryManager.GetDeviceAsync(deviceId);
+            }
+
+            return device.Authentication.SymmetricKey.PrimaryKey;
+        }
+
+        /// <summary> Open connection with the hub and wait for messages </summary>
         private async void ReceiveC2dAsync()
         {
+            // loop never finishes
             while (true)
             {
-                Microsoft.Azure.Devices.Client.Message receivedMessage = await deviceClient.ReceiveAsync();
-                if (receivedMessage == null) continue;
+                Microsoft.Azure.Devices.Client.Message receivedMessage = null;
+                try
+                {
+                    // await for a message
+                    receivedMessage = await deviceClient.ReceiveAsync();
 
-                string message = Encoding.ASCII.GetString(receivedMessage.GetBytes());
+                    // when message received check if not null
+                    if (receivedMessage == null) continue;
 
-                txtOutput.Text += "Message received: " + message  + Environment.NewLine;
-
-                await deviceClient.CompleteAsync(receivedMessage);
+                    // Decode message and add to the output box
+                    string message = Encoding.ASCII.GetString(receivedMessage.GetBytes());
+                    txtOutput.Text += "Message received: " + message + Environment.NewLine;
+                }
+                finally
+                {
+                    // send a message back saying we are done with the message
+                    if(receivedMessage != null)
+                    {
+                        await deviceClient.CompleteAsync(receivedMessage);
+                    }
+                }
             }
         }
     }
