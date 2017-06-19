@@ -10,4 +10,7 @@
   The world is your oyster.
   <button (click)="test()" >test</button>
   <button ion-button color="secondary" (click)="sendMessageToAzure()">Send message to azure</button>
+
+  <button ion-button color="primary" (click)="sendMessageToEventHub()">Send message to Hub</button>
+  <span class="block">{{messageStatus}}</span>
 </ion-content>
