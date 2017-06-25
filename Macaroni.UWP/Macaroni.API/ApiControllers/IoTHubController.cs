@@ -15,6 +15,7 @@ namespace Macaroni.API.ApiControllers
     {
         static ServiceClient serviceClient;
 
+        [HttpPost]
         public void SendMessage(IoTMessage message)
         {
             serviceClient = ServiceClient.CreateFromConnectionString(Constants.HubConnectionString);
