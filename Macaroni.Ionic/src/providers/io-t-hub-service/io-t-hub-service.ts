@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+﻿import { Injectable } from '@angular/core';
 import { Http, RequestOptions, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 import { IoTMessage } from '../../models/IoTMessage';
@@ -24,7 +24,7 @@ export class IoTHubServiceProvider {
                 resolve();
               }, 
               err => {
-                console.error(err)
+                console.error(err);
               } 
             ); 
     });
